@@ -70,6 +70,10 @@ public class MandatoryFieldsRegister {
         String expected_accountPageTitle = "My Account";
         Assert.assertEquals(actual_accountPageTitle,expected_accountPageTitle);
 
+        driver.findElement(By.linkText("Subscribe / unsubscribe to newsletter")).click();
+        Boolean noRadioButtonState = driver.findElement(By.cssSelector("input[value='0']")).isSelected();
+        Assert.assertTrue(noRadioButtonState);
+
         driver.quit();
     }
 }
