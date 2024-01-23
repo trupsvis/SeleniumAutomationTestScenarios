@@ -1,12 +1,14 @@
 package registerprocess;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import javax.swing.*;
 import java.util.Date;
 
 public class MandatoryFieldsRegister {
@@ -73,6 +75,27 @@ public class MandatoryFieldsRegister {
         driver.findElement(By.linkText("Subscribe / unsubscribe to newsletter")).click();
         Boolean noRadioButtonState = driver.findElement(By.cssSelector("input[value='0']")).isSelected();
         Assert.assertTrue(noRadioButtonState);
+
+        driver.quit();
+    }
+
+    @Test
+    public void registerAccountAsterickSymbolCheck(){
+        WebDriver driver = new ChromeDriver();
+        driver.manage().window().maximize();
+        driver.get("https://tutorialsninja.com/demo/index.php?route=account/register");
+        WebElement firstNameLabel = driver.findElement(By.xpath("//label[@for='input-firstname']"));
+        JavascriptExecutor jse = (JavascriptExecutor)driver;
+        String actualFirstNameAstrickContent = (String) jse.executeScript("return window.getComputedStyle(arguments[0],'::before').getPropertyValue('content');",firstNameLabel);
+        Assert.assertTrue(actualFirstNameAstrickContent.contains("*"));
+        String actualFirstNameAstrickColor = (String) jse.executeScript("return window.getComputedStyle(arguments[0],'::before').getPropertyValue('color')",firstNameLabel);
+        Assert.assertEquals(actualFirstNameAstrickColor,"rgb(255, 0, 0)");
+
+        WebElement lastNameLabel = driver.findElement(By.cssSelector("label[for='input-lastname']"));
+        String actualLastNameAstrickContent = (String) jse.executeScript("return window.getComputedStyle(arguments[0],'::before').getPropertyValue('content');",lastNameLabel);
+        Assert.assertTrue(actualFirstNameAstrickContent.contains("*"));
+        String actualLastNameAstrickColor = (String) jse.executeScript("return window.getComputedStyle(arguments[0],'::before').getPropertyValue('color')",lastNameLabel);
+        Assert.assertEquals(actualLastNameAstrickColor,"rgb(255, 0, 0)");
 
         driver.quit();
     }
